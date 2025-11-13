@@ -1,0 +1,133 @@
+<div class="admin-container">
+  <div class="header">
+    <h1>Admin Dashboard</h1>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+
+  <div class="dashboard-card">
+    <div class="toolbar">
+      <div class="filters">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search by company or email..."
+          (input)="onSearchChange($event)"
+        />
+
+        <select class="filter-select" (change)="onIndustryChange($event)">
+          <option value="">All Industries</option>
+          <option *ngFor="let industry of industries" [value]="industry">
+            {{ industry | titlecase }}
+          </option>
+        </select>
+
+        <select class="filter-select" (change)="onCompanySizeChange($event)">
+          <option value="">All Sizes</option>
+          <option *ngFor="let size of companySizes" [value]="size">
+            {{ size }} employees
+          </option>
+        </select>
+      </div>
+
+      <button class="btn btn-export" (click)="exportToCSV()" [disabled]="filteredResponses.length === 0">
+        📥 Export CSV
+      </button>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-value">{{ responses.length }}</div>
+        <div class="stat-label">Total Responses</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ filteredResponses.length }}</div>
+        <div class="stat-label">Filtered Results</div>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="loading">
+      Loading responses...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="!loading && filteredResponses.length === 0" class="no-data">
+      No responses found
+    </div>
+
+    <div *ngIf="!loading && filteredResponses.length > 0" class="table-container">
+      <table class="responses-table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Email</th>
+            <th>Industry</th>
+            <th>Size</th>
+            <th>Use Case</th>
+            <th>Screens</th>
+            <th>Proficiency</th>
+            <th>Submitted</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let response of filteredResponses" class="response-row">
+            <td>{{ response.companyName }}</td>
+            <td>{{ response.email }}</td>
+            <td>
+              <span class="badge badge-industry">{{ response.industry }}</span>
+            </td>
+            <td>{{ response.companySize }}</td>
+            <td>{{ response.primaryUseCase }}</td>
+            <td>{{ response.numberOfScreens }}</td>
+            <td>
+              <span class="badge" [class.badge-beginner]="response.technicalProficiency === 'beginner'"
+                    [class.badge-intermediate]="response.technicalProficiency === 'intermediate'"
+                    [class.badge-advanced]="response.technicalProficiency === 'advanced'">
+                {{ response.technicalProficiency }}
+              </span>
+            </td>
+            <td>{{ formatDate(response.submittedAt) }}</td>
+            <td>
+              <button class="btn-delete" (click)="deleteResponse(response._id)" title="Delete response">
+                🗑️
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Expandable Details -->
+    <div class="details-section" *ngIf="filteredResponses.length > 0">
+      <h3>Response Details</h3>
+      <div class="response-details" *ngFor="let response of filteredResponses">
+        <div class="detail-header" (click)="response.expanded = !response.expanded">
+          <strong>{{ response.companyName }}</strong>
+          <span class="toggle">{{ response.expanded ? '▼' : '▶' }}</span>
+        </div>
+
+        <div class="detail-content" *ngIf="response.expanded">
+          <div class="detail-row">
+            <strong>Screen Locations:</strong> {{ response.screenLocations || 'Not specified' }}
+          </div>
+          <div class="detail-row">
+            <strong>Current Platform:</strong> {{ response.currentPlatform || 'Not specified' }}
+          </div>
+          <div class="detail-row">
+            <strong>Feature Interests:</strong>
+            <span class="feature-tag" *ngFor="let feature of response.featureInterests">
+              {{ feature }}
+            </span>
+          </div>
+          <div class="detail-row" *ngIf="response.additionalComments">
+            <strong>Additional Comments:</strong>
+            <p>{{ response.additionalComments }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

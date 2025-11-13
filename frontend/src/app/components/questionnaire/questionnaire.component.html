@@ -1,0 +1,213 @@
+<div class="questionnaire-container">
+  <div class="header">
+    <h1>OptiSigns Onboarding</h1>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" [style.width.%]="progress"></div>
+  </div>
+
+  <div class="step-indicator">
+    Step {{ currentStep }} of {{ totalSteps }}
+  </div>
+
+  <div class="questionnaire-card">
+    <form [formGroup]="questionnaireForm">
+
+      <!-- Step 1: Company Information -->
+      <div class="step" *ngIf="currentStep === 1">
+        <h2>Tell us about your organization</h2>
+
+        <div class="form-group">
+          <label for="companyName">Company Name *</label>
+          <input
+            type="text"
+            id="companyName"
+            formControlName="companyName"
+            class="form-control"
+            placeholder="Enter your company name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="companySize">Company Size *</label>
+          <select id="companySize" formControlName="companySize" class="form-control">
+            <option value="">Select company size</option>
+            <option *ngFor="let size of companySizes" [value]="size">{{ size }} employees</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="industry">Industry *</label>
+          <select id="industry" formControlName="industry" class="form-control">
+            <option value="">Select your industry</option>
+            <option *ngFor="let ind of industries" [value]="ind.value">{{ ind.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Step 2: Primary Use Case -->
+      <div class="step" *ngIf="currentStep === 2">
+        <h2>How do you plan to use OptiSigns?</h2>
+
+        <div class="form-group">
+          <label>Primary Use Case *</label>
+          <div class="radio-grid">
+            <div
+              *ngFor="let useCase of useCases"
+              class="radio-card"
+              [class.selected]="questionnaireForm.get('primaryUseCase')?.value === useCase.value"
+              (click)="questionnaireForm.patchValue({ primaryUseCase: useCase.value })"
+            >
+              <div class="icon">{{ useCase.icon }}</div>
+              <div class="label">{{ useCase.label }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="questionnaireForm.get('primaryUseCase')?.value === 'other'">
+          <label for="useCaseDescription">Please describe your use case</label>
+          <input
+            type="text"
+            id="useCaseDescription"
+            formControlName="useCaseDescription"
+            class="form-control"
+            placeholder="Tell us more about how you'll use OptiSigns"
+          />
+        </div>
+      </div>
+
+      <!-- Step 3: Screen Setup -->
+      <div class="step" *ngIf="currentStep === 3">
+        <h2>Tell us about your display setup</h2>
+
+        <div class="form-group">
+          <label for="numberOfScreens">Number of Screens *</label>
+          <select id="numberOfScreens" formControlName="numberOfScreens" class="form-control">
+            <option value="">Select number of screens</option>
+            <option *ngFor="let count of screenCounts" [value]="count">{{ count }} screens</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="screenLocations">Screen Locations (Optional)</label>
+          <input
+            type="text"
+            id="screenLocations"
+            formControlName="screenLocations"
+            class="form-control"
+            placeholder="e.g., Main lobby, Conference rooms, Cafeteria"
+          />
+        </div>
+      </div>
+
+      <!-- Step 4: Technical Profile -->
+      <div class="step" *ngIf="currentStep === 4">
+        <h2>Help us understand your technical background</h2>
+
+        <div class="form-group">
+          <label>Technical Proficiency *</label>
+          <div class="radio-list">
+            <div
+              *ngFor="let level of proficiencyLevels"
+              class="radio-option"
+              [class.selected]="questionnaireForm.get('technicalProficiency')?.value === level.value"
+              (click)="questionnaireForm.patchValue({ technicalProficiency: level.value })"
+            >
+              <span class="icon">{{ level.icon }}</span>
+              <div class="content">
+                <div class="title">{{ level.label }}</div>
+                <div class="description">{{ level.description }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="currentPlatform">Current Platform (Optional)</label>
+          <input
+            type="text"
+            id="currentPlatform"
+            formControlName="currentPlatform"
+            class="form-control"
+            placeholder="e.g., PowerPoint, Google Slides, Another digital signage platform, or None"
+          />
+        </div>
+      </div>
+
+      <!-- Step 5: Feature Interests -->
+      <div class="step" *ngIf="currentStep === 5">
+        <h2>Which features are most important to you?</h2>
+
+        <div class="form-group">
+          <label>Feature Interests (Select all that apply)</label>
+          <div class="checkbox-grid">
+            <div
+              *ngFor="let feature of features"
+              class="checkbox-card"
+              [class.selected]="isFeatureSelected(feature.value)"
+              (click)="toggleFeature(feature.value)"
+            >
+              <div class="icon">{{ feature.icon }}</div>
+              <div class="label">{{ feature.label }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="additionalComments">Additional Comments (Optional)</label>
+          <textarea
+            id="additionalComments"
+            formControlName="additionalComments"
+            class="form-control"
+            rows="4"
+            maxlength="500"
+            placeholder="Any specific needs, questions, or feedback?"
+          ></textarea>
+          <div class="char-count">
+            {{ questionnaireForm.get('additionalComments')?.value?.length || 0 }} / 500
+          </div>
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+      </div>
+
+    </form>
+
+    <!-- Navigation Buttons -->
+    <div class="button-group">
+      <button
+        *ngIf="currentStep > 1"
+        type="button"
+        class="btn btn-secondary"
+        (click)="previousStep()"
+      >
+        ← Back
+      </button>
+
+      <button
+        *ngIf="currentStep < totalSteps"
+        type="button"
+        class="btn btn-primary"
+        [disabled]="!isStepValid()"
+        (click)="nextStep()"
+      >
+        Next →
+      </button>
+
+      <button
+        *ngIf="currentStep === totalSteps"
+        type="button"
+        class="btn btn-primary"
+        [disabled]="loading"
+        (click)="onSubmit()"
+      >
+        <span *ngIf="!loading">Submit ✓</span>
+        <span *ngIf="loading">Submitting...</span>
+      </button>
+    </div>
+  </div>
+</div>
