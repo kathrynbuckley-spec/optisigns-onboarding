@@ -20,6 +20,30 @@
         <h2>Tell us about your organization</h2>
 
         <div class="form-group">
+          <label for="accountCountry">Company Country *</label>
+          <ng-select
+            id="accountCountry"
+            [items]="countriesGrouped"
+            bindLabel="name"
+            bindValue="name"
+            groupBy="group"
+            [selectableGroup]="false"
+            [selectableGroupAsModel]="false"
+            formControlName="accountCountry"
+            placeholder="Select your country"
+            [searchable]="true"
+            [clearable]="false"
+            class="form-control">
+            <ng-template ng-optgroup-tmp let-item="item">
+              {{ item.group }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              {{ item.name }}
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-group">
           <label for="companyName">Company Name *</label>
           <input
             type="text"

@@ -15,6 +15,11 @@ const responseSchema = new mongoose.Schema({
   },
 
   // Step 1: Company Information
+  accountCountry: {
+    type: String,
+    required: [true, 'Company country is required'],
+    trim: true
+  },
   companyName: {
     type: String,
     required: [true, 'Company name is required'],

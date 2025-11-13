@@ -4,6 +4,7 @@ export interface QuestionnaireResponse {
   email?: string;
 
   // Step 1: Company Information
+  accountCountry: string;
   companyName: string;
   companySize: '1-10' | '11-50' | '51-200' | '201-500' | '500+';
   industry: 'retail' | 'healthcare' | 'education' | 'hospitality' | 'corporate' | 'transportation' | 'government' | 'other';
