@@ -1,0 +1,66 @@
+name: optisigns-onboarding
+region: nyc
+
+services:
+  # Backend API Service
+  - name: backend
+    source_dir: /backend
+    github:
+      repo: YOUR_GITHUB_USERNAME/optisigns-onboarding
+      branch: main
+      deploy_on_push: true
+
+    build_command: npm install
+    run_command: npm start
+
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs
+
+    http_port: 8080
+
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "8080"
+      - key: JWT_SECRET
+        value: CHANGE_THIS_TO_SECURE_RANDOM_STRING
+        type: SECRET
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: MONGODB_URI
+        value: mongodb+srv://kathrynbuckley_db_user:KKwx8mSwKDXTKmSL@cluster0.f7fzwx8.mongodb.net/optisigns-onboarding?retryWrites=true&w=majority&appName=Cluster0
+        type: SECRET
+      - key: CORS_ORIGIN
+        value: ${frontend.PUBLIC_URL}
+
+    health_check:
+      http_path: /api/health
+      initial_delay_seconds: 10
+      period_seconds: 10
+      timeout_seconds: 3
+
+  # Frontend Static Site
+  - name: frontend
+    source_dir: /frontend
+    github:
+      repo: YOUR_GITHUB_USERNAME/optisigns-onboarding
+      branch: main
+      deploy_on_push: true
+
+    build_command: npm install && npm run build
+    run_command: npx http-server dist/frontend/browser -p 8080 -c-1
+
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs
+
+    http_port: 8080
+
+    envs:
+      - key: API_URL
+        value: ${backend.PUBLIC_URL}/api
+
+    routes:
+      - path: /

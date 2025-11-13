@@ -62,8 +62,8 @@ import { AuthService } from '../../services/auth.service';
 
         <div class="demo-credentials">
           <strong>Demo Credentials:</strong><br>
-          User: user@acmecoffee.com / password123<br>
-          Admin: admin@optisigns.com / admin123
+          User: user&#64;acmecoffee.com / password123<br>
+          Admin: admin&#64;optisigns.com / admin123
         </div>
       </div>
     </div>
