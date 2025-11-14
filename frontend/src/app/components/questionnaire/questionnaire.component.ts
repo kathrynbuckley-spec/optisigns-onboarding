@@ -16,7 +16,7 @@ import { QuestionnaireResponse } from '../../models/response.model';
 })
 export class QuestionnaireComponent implements OnInit {
   currentStep = 1;
-  totalSteps = 8;
+  totalSteps = 7;
   questionnaireForm: FormGroup;
   loading = false;
   errorMessage = '';
@@ -345,12 +345,6 @@ export class QuestionnaireComponent implements OnInit {
     { value: '100+', label: '100+ screens', description: 'Enterprise scale+', icon: '📺' }
   ];
 
-  // Usage types
-  usageTypes = [
-    { value: 'internal', label: 'Internal', description: 'For employees and internal communications', icon: '🏢' },
-    { value: 'external', label: 'External', description: 'For customers and public-facing displays', icon: '👥' }
-  ];
-
   // Use cases
   useCases = [
     { value: 'menu-boards', label: 'Menu Boards', icon: '📋' },
@@ -399,22 +393,18 @@ export class QuestionnaireComponent implements OnInit {
       // Step 3: Screen Count
       numberOfScreens: ['', Validators.required],
 
-      // Step 4: Usage Type
-      usageType: ['', Validators.required],
-
-      // Step 5: Primary Use Case
+      // Step 4: Primary Use Case
       primaryUseCase: ['', Validators.required],
       useCaseDescription: [''],
 
-      // Step 6: Technical Proficiency + Current Platform
+      // Step 5: Technical Proficiency + Current Platform
       technicalProficiency: ['', Validators.required],
-      currentPlatform: [''],
+      currentPlatform: ['', Validators.maxLength(200)],
 
-      // Step 7: Feature Interests
+      // Step 6: Feature Interests
       featureInterests: [[]],
 
-      // Step 8: Summary + AI Toggle + Additional Comments
-      aiSuggestionsEnabled: [true], // Default to true (ON)
+      // Step 7: Summary + Additional Comments
       additionalComments: ['', Validators.maxLength(500)],
 
       // Optional fields
@@ -465,26 +455,23 @@ export class QuestionnaireComponent implements OnInit {
       case 3:
         return ['numberOfScreens'];
       case 4:
-        return ['usageType'];
-      case 5:
         return ['primaryUseCase'];
-      case 6:
+      case 5:
         return ['technicalProficiency'];
-      case 7:
+      case 6:
         return []; // Feature interests are optional
-      case 8:
+      case 7:
         return []; // Summary page, no validation needed
       default:
         return [];
     }
   }
 
-  // Helper to get summary data for step 8
+  // Helper to get summary data for step 7
   getSummaryData() {
     const formValue = this.questionnaireForm.value;
     const industryObj = this.industries.find(i => i.value === formValue.industry);
     const screenCountObj = this.screenCounts.find(s => s.value === formValue.numberOfScreens);
-    const usageTypeObj = this.usageTypes.find(u => u.value === formValue.usageType);
     const useCaseObj = this.useCases.find(u => u.value === formValue.primaryUseCase);
     const proficiencyObj = this.proficiencyLevels.find(p => p.value === formValue.technicalProficiency);
 
@@ -494,7 +481,6 @@ export class QuestionnaireComponent implements OnInit {
       companySize: formValue.companySize || '',
       industry: industryObj?.label || '',
       screenCount: screenCountObj?.label || '',
-      usageType: usageTypeObj?.label || '',
       primaryUseCase: useCaseObj?.label || '',
       technicalProficiency: proficiencyObj?.label || '',
       currentPlatform: formValue.currentPlatform || 'None',

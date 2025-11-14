@@ -43,36 +43,73 @@
     }
   }
 
-  .progress-steps {
+  .progress-bar-container {
     display: flex;
-    gap: 12px;
-    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 280px;
 
-    .progress-step {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .progress-bar-track {
+      width: 100%;
+      height: 10px;
       background: #e2e8f0;
-      color: #64748b;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #20CE88 0%, #2172CC 100%);
+      border-radius: 20px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      box-shadow: 0 2px 8px rgba(32, 206, 136, 0.3);
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg,
+          rgba(255, 255, 255, 0.2) 0%,
+          rgba(255, 255, 255, 0.1) 50%,
+          rgba(255, 255, 255, 0.2) 100%);
+        animation: shimmer 2s infinite;
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
       font-weight: 600;
-      font-size: 14px;
-      transition: all 0.3s ease;
 
-      &.active {
-        background: #52C67A;
-        color: white;
-        transform: scale(1.1);
+      .step-label {
+        color: #2d3748;
+        letter-spacing: 0.3px;
       }
 
-      &.completed {
-        background: transparent;
-      }
-
-      .step-number {
-        display: block;
+      .progress-percentage {
+        background: linear-gradient(90deg, #20CE88 0%, #2172CC 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+        font-size: 14px;
       }
     }
   }
@@ -503,6 +540,100 @@
   }
 }
 
+// Current Platform Section
+.current-platform-section {
+  margin-top: 40px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #52C67A;
+    box-shadow: 0 4px 12px rgba(82, 198, 122, 0.08);
+  }
+
+  .platform-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #2d3748;
+      margin: 0;
+
+      .platform-icon {
+        font-size: 20px;
+      }
+    }
+
+    .optional-badge {
+      background: linear-gradient(135deg, #e8f5ee 0%, #d4edda 100%);
+      color: #45B368;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 12px;
+      border-radius: 12px;
+      border: 1px solid #b8e6cc;
+    }
+  }
+
+  .platform-hint {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 16px 0;
+    line-height: 1.5;
+  }
+
+  .platform-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #2d3748;
+    background: white;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+
+    &:hover {
+      border-color: #cbd5e0;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #52C67A;
+      box-shadow: 0 0 0 4px rgba(82, 198, 122, 0.1);
+      background: #fcfffe;
+    }
+
+    &::placeholder {
+      color: #94a3b8;
+    }
+  }
+
+  .char-count {
+    text-align: right;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+}
+
 // Step 6: Proficiency Options
 .proficiency-options {
   display: flex;
@@ -846,8 +977,13 @@
   .header {
     padding: 24px;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     align-items: flex-start;
+
+    .progress-bar-container {
+      width: 100%;
+      min-width: unset;
+    }
   }
 
   .content-left {

@@ -12,18 +12,13 @@
     </div>
 
     <!-- Progress Indicator -->
-    <div class="progress-steps">
-      <div
-        *ngFor="let step of [1,2,3,4,5,6,7,8]"
-        class="progress-step"
-        [class.completed]="step < currentStep"
-        [class.active]="step === currentStep"
-      >
-        <span class="step-number" *ngIf="step > currentStep || step === currentStep">{{ step }}</span>
-        <svg *ngIf="step < currentStep" width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <circle cx="10" cy="10" r="10" fill="#52C67A"/>
-          <path d="M6 10L9 13L14 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+    <div class="progress-bar-container">
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" [style.width.%]="progress"></div>
+      </div>
+      <div class="progress-text">
+        <span class="step-label">Step {{ currentStep }} of {{ totalSteps }}</span>
+        <span class="progress-percentage">{{ progress | number:'1.0-0' }}%</span>
       </div>
     </div>
   </div>
@@ -118,27 +113,8 @@
           </div>
         </div>
 
-        <!-- Step 4: Internal/External -->
+        <!-- Step 4: Primary Use Case -->
         <div class="step-content" *ngIf="currentStep === 4">
-          <h2>Are you internal or external?</h2>
-          <p class="subtitle">Who will be viewing your displays?</p>
-
-          <div class="usage-cards">
-            <div
-              *ngFor="let usage of usageTypes"
-              class="usage-card"
-              [class.selected]="questionnaireForm.get('usageType')?.value === usage.value"
-              (click)="questionnaireForm.patchValue({ usageType: usage.value })"
-            >
-              <div class="usage-icon">{{ usage.icon }}</div>
-              <div class="usage-label">{{ usage.label }}</div>
-              <div class="usage-description">{{ usage.description }}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 5: Primary Use Case -->
-        <div class="step-content" *ngIf="currentStep === 5">
           <h2>How do you plan to use OptiSigns?</h2>
           <p class="subtitle">Select your primary use case</p>
 
@@ -167,8 +143,8 @@
           </div>
         </div>
 
-        <!-- Step 6: Technical Proficiency -->
-        <div class="step-content" *ngIf="currentStep === 6">
+        <!-- Step 5: Technical Proficiency -->
+        <div class="step-content" *ngIf="currentStep === 5">
           <h2>What's your technical background?</h2>
           <p class="subtitle">This helps us customize your onboarding experience</p>
 
@@ -188,20 +164,31 @@
           </div>
 
           <!-- Current Platform (Optional) -->
-          <div class="form-field" style="margin-top: 32px;">
-            <label for="currentPlatform">Current Platform (Optional)</label>
-            <input
-              type="text"
+          <div class="current-platform-section">
+            <div class="platform-header">
+              <label for="currentPlatform">
+                <span class="platform-icon">💼</span>
+                Current Platform (Optional)
+              </label>
+              <span class="optional-badge">Optional</span>
+            </div>
+            <p class="platform-hint">Tell us about any tools you're currently using for digital signage or presentations</p>
+            <textarea
               id="currentPlatform"
               formControlName="currentPlatform"
-              class="form-input"
-              placeholder="e.g., PowerPoint, Google Slides, Another digital signage platform"
-            />
+              class="form-textarea platform-textarea"
+              rows="3"
+              maxlength="200"
+              placeholder="e.g., PowerPoint, Google Slides, Canva, Rise Vision, ScreenCloud, or any other digital signage platform..."
+            ></textarea>
+            <div class="char-count">
+              {{ questionnaireForm.get('currentPlatform')?.value?.length || 0 }} / 200
+            </div>
           </div>
         </div>
 
-        <!-- Step 7: Feature Interests -->
-        <div class="step-content" *ngIf="currentStep === 7">
+        <!-- Step 6: Feature Interests -->
+        <div class="step-content" *ngIf="currentStep === 6">
           <h2>Which features are most important to you?</h2>
           <p class="subtitle">Select all that apply (optional)</p>
 
@@ -224,8 +211,8 @@
           </div>
         </div>
 
-        <!-- Step 8: Summary -->
-        <div class="step-content" *ngIf="currentStep === 8">
+        <!-- Step 7: Summary -->
+        <div class="step-content" *ngIf="currentStep === 7">
           <div class="completion-header">
             <div class="completion-icon">
               <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
@@ -267,11 +254,6 @@
             </div>
 
             <div class="summary-row">
-              <div class="summary-label">Usage Type</div>
-              <div class="summary-value">{{ getSummaryData().usageType }}</div>
-            </div>
-
-            <div class="summary-row">
               <div class="summary-label">Primary Use Case</div>
               <div class="summary-value">{{ getSummaryData().primaryUseCase }}</div>
             </div>
@@ -284,26 +266,6 @@
             <div class="summary-row" *ngIf="getSummaryData().currentPlatform !== 'None'">
               <div class="summary-label">Current Platform</div>
               <div class="summary-value">{{ getSummaryData().currentPlatform }}</div>
-            </div>
-
-            <!-- AI Suggestions Toggle -->
-            <div class="ai-toggle-section">
-              <div class="toggle-header">
-                <div class="toggle-info">
-                  <div class="toggle-label">
-                    <span class="toggle-icon">🤖</span>
-                    <span class="toggle-title">AI Dashboard Customization</span>
-                  </div>
-                  <p class="toggle-description">Enable AI-powered suggestions and personalized recommendations</p>
-                </div>
-                <label class="toggle-switch">
-                  <input
-                    type="checkbox"
-                    formControlName="aiSuggestionsEnabled"
-                  />
-                  <span class="toggle-slider"></span>
-                </label>
-              </div>
             </div>
 
             <!-- Additional Comments (Optional) -->
@@ -425,27 +387,8 @@
           </svg>
         </div>
 
-        <!-- Step 4: People Illustration -->
+        <!-- Step 4: Use Case Illustration -->
         <div class="illustration" *ngIf="currentStep === 4">
-          <svg viewBox="0 0 400 400" class="people-illustration">
-            <circle cx="200" cy="200" r="180" fill="#E8F5EE" opacity="0.5"/>
-
-            <!-- Person 1 -->
-            <circle cx="140" cy="180" r="25" fill="#52C67A"/>
-            <ellipse cx="140" cy="240" rx="35" ry="45" fill="#45B368"/>
-
-            <!-- Person 2 -->
-            <circle cx="200" cy="170" r="30" fill="#6DD68E"/>
-            <ellipse cx="200" cy="240" rx="40" ry="50" fill="#52C67A"/>
-
-            <!-- Person 3 -->
-            <circle cx="260" cy="180" r="25" fill="#45B368"/>
-            <ellipse cx="260" cy="240" rx="35" ry="45" fill="#3AA861"/>
-          </svg>
-        </div>
-
-        <!-- Step 5: Use Case Illustration -->
-        <div class="illustration" *ngIf="currentStep === 5">
           <svg viewBox="0 0 400 400" class="usecase-illustration">
             <circle cx="200" cy="200" r="180" fill="#E8F5EE" opacity="0.5"/>
             <circle cx="100" cy="120" r="50" fill="#B8E6CC" opacity="0.3"/>
@@ -459,8 +402,8 @@
           </svg>
         </div>
 
-        <!-- Step 6: Technical Level Illustration -->
-        <div class="illustration" *ngIf="currentStep === 6">
+        <!-- Step 5: Technical Level Illustration -->
+        <div class="illustration" *ngIf="currentStep === 5">
           <svg viewBox="0 0 400 400" class="technical-illustration">
             <circle cx="200" cy="200" r="180" fill="#E8F5EE" opacity="0.5"/>
 
@@ -479,8 +422,8 @@
           </svg>
         </div>
 
-        <!-- Step 7: Features Illustration -->
-        <div class="illustration" *ngIf="currentStep === 7">
+        <!-- Step 6: Features Illustration -->
+        <div class="illustration" *ngIf="currentStep === 6">
           <svg viewBox="0 0 400 400" class="features-illustration">
             <circle cx="200" cy="200" r="180" fill="#E8F5EE" opacity="0.5"/>
 
@@ -494,7 +437,7 @@
           </svg>
         </div>
 
-        <!-- Step 8: No illustration, summary on left -->
+        <!-- Step 7: No illustration, summary on left -->
       </div>
     </div>
   </div>

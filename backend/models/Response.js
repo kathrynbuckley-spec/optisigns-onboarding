@@ -33,7 +33,7 @@ const responseSchema = new mongoose.Schema({
   industry: {
     type: String,
     required: [true, 'Industry is required'],
-    enum: ['retail', 'healthcare', 'education', 'hospitality', 'corporate', 'transportation', 'government', 'other']
+    enum: ['retail', 'healthcare', 'education', 'hospitality', 'corporate', 'professional-services', 'real-estate', 'technology']
   },
 
   // Step 2: Primary Use Case
@@ -66,7 +66,8 @@ const responseSchema = new mongoose.Schema({
   },
   currentPlatform: {
     type: String,
-    trim: true
+    trim: true,
+    maxlength: [200, 'Current platform description cannot exceed 200 characters']
   },
 
   // Step 5: Feature Interests

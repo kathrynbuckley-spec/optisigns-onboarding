@@ -10,9 +10,10 @@ const authenticateToken = require('../middleware/auth');
 // @access  Protected (requires JWT)
 router.post('/', authenticateToken, [
   // Validation middleware
+  body('accountCountry').trim().notEmpty().withMessage('Country is required'),
   body('companyName').trim().notEmpty().withMessage('Company name is required'),
   body('companySize').isIn(['1-10', '11-50', '51-200', '201-500', '500+']).withMessage('Invalid company size'),
-  body('industry').isIn(['retail', 'healthcare', 'education', 'hospitality', 'corporate', 'transportation', 'government', 'other']).withMessage('Invalid industry'),
+  body('industry').isIn(['retail', 'healthcare', 'education', 'hospitality', 'corporate', 'professional-services', 'real-estate', 'technology']).withMessage('Invalid industry'),
   body('primaryUseCase').isIn(['menu-boards', 'wayfinding', 'corporate-comms', 'advertising', 'information-display', 'event-signage', 'other']).withMessage('Invalid primary use case'),
   body('numberOfScreens').isIn(['1-5', '6-20', '21-50', '51-100', '100+']).withMessage('Invalid number of screens'),
   body('technicalProficiency').isIn(['beginner', 'intermediate', 'advanced']).withMessage('Invalid technical proficiency'),
@@ -40,6 +41,7 @@ router.post('/', authenticateToken, [
 
     // Extract validated data from request body
     const {
+      accountCountry,
       companyName,
       companySize,
       industry,
@@ -58,6 +60,7 @@ router.post('/', authenticateToken, [
     const response = new Response({
       userId: req.user._id,
       email: req.user.email,
+      accountCountry,
       companyName,
       companySize,
       industry,
