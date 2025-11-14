@@ -3,7 +3,7 @@
   <div class="header">
     <div class="logo-section">
       <div class="logo-icon">
-        <img src="assets/optisigns-logo.png" alt="OptiSigns Logo" width="40" height="40">
+        <img src="assets/optisigns-logo.png" alt="OptiSigns Logo">
       </div>
       <div class="logo-text">
         <h1>OptiSigns</h1>
@@ -89,34 +89,25 @@
           </div>
         </div>
 
-        <!-- Step 3: Screen Count -->
+        <!-- Step 3: Screen Count + Primary Use Case -->
         <div class="step-content" *ngIf="currentStep === 3">
-          <h2>How many screens do you plan on using?</h2>
-          <p class="subtitle">Help us understand your deployment size</p>
+          <h2>Tell us about your setup</h2>
+          <p class="subtitle">Help us understand your deployment</p>
 
-          <div class="screen-options">
-            <div
-              *ngFor="let screen of screenCounts"
-              class="screen-option"
-              [class.selected]="questionnaireForm.get('numberOfScreens')?.value === screen.value"
-              (click)="questionnaireForm.patchValue({ numberOfScreens: screen.value })"
-            >
-              <div class="option-icon">{{ screen.icon }}</div>
-              <div class="option-content">
-                <div class="option-label">{{ screen.label }}</div>
-                <div class="option-description">{{ screen.description }}</div>
-              </div>
-              <div class="option-radio">
-                <div class="radio-dot"></div>
-              </div>
+          <div class="company-info">
+            <!-- Number of Screens Dropdown -->
+            <div class="form-field">
+              <label>How many screens do you plan on using?</label>
+              <select formControlName="numberOfScreens" class="form-select">
+                <option value="">Select screen count...</option>
+                <option *ngFor="let screen of screenCounts" [value]="screen.value">
+                  {{ screen.label }} - {{ screen.description }}
+                </option>
+              </select>
             </div>
           </div>
-        </div>
 
-        <!-- Step 4: Primary Use Case -->
-        <div class="step-content" *ngIf="currentStep === 4">
-          <h2>How do you plan to use OptiSigns?</h2>
-          <p class="subtitle">Select your primary use case</p>
+          <h3 style="font-size: 20px; margin-top: 40px; margin-bottom: 16px; color: #1a202c;">How do you plan to use OptiSigns?</h3>
 
           <div class="use-case-grid">
             <div
@@ -143,8 +134,8 @@
           </div>
         </div>
 
-        <!-- Step 5: Technical Proficiency -->
-        <div class="step-content" *ngIf="currentStep === 5">
+        <!-- Step 4: Technical Proficiency -->
+        <div class="step-content" *ngIf="currentStep === 4">
           <h2>What's your technical background?</h2>
           <p class="subtitle">This helps us customize your onboarding experience</p>
 
@@ -187,8 +178,8 @@
           </div>
         </div>
 
-        <!-- Step 6: Feature Interests -->
-        <div class="step-content" *ngIf="currentStep === 6">
+        <!-- Step 5: Feature Interests -->
+        <div class="step-content" *ngIf="currentStep === 5">
           <h2>Which features are most important to you?</h2>
           <p class="subtitle">Select all that apply (optional)</p>
 
@@ -211,86 +202,11 @@
           </div>
         </div>
 
-        <!-- Step 7: Summary -->
-        <div class="step-content" *ngIf="currentStep === 7">
-          <div class="completion-header">
-            <div class="completion-icon">
-              <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                <circle cx="40" cy="40" r="40" fill="#E8F5EE"/>
-                <circle cx="40" cy="40" r="28" fill="#52C67A"/>
-                <path d="M28 40L36 48L52 32" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <h2>You're all set!</h2>
-            <p class="subtitle">Your OptiSigns account is ready. Here's a summary of your setup</p>
-          </div>
-
-          <div class="summary-card">
-            <div class="summary-header">Your Configuration</div>
-
-            <div class="summary-row">
-              <div class="summary-label">Company Name</div>
-              <div class="summary-value">{{ getSummaryData().companyName }}</div>
-            </div>
-
-            <div class="summary-row">
-              <div class="summary-label">Country</div>
-              <div class="summary-value">{{ getSummaryData().country }}</div>
-            </div>
-
-            <div class="summary-row">
-              <div class="summary-label">Company Size</div>
-              <div class="summary-value">{{ getSummaryData().companySize }} employees</div>
-            </div>
-
-            <div class="summary-row">
-              <div class="summary-label">Industry</div>
-              <div class="summary-value">{{ getSummaryData().industry }}</div>
-            </div>
-
-            <div class="summary-row">
-              <div class="summary-label">Screen Count</div>
-              <div class="summary-value">{{ getSummaryData().screenCount }}</div>
-            </div>
-
-            <div class="summary-row">
-              <div class="summary-label">Primary Use Case</div>
-              <div class="summary-value">{{ getSummaryData().primaryUseCase }}</div>
-            </div>
-
-            <div class="summary-row">
-              <div class="summary-label">Technical Level</div>
-              <div class="summary-value">{{ getSummaryData().technicalProficiency }}</div>
-            </div>
-
-            <div class="summary-row" *ngIf="getSummaryData().currentPlatform !== 'None'">
-              <div class="summary-label">Current Platform</div>
-              <div class="summary-value">{{ getSummaryData().currentPlatform }}</div>
-            </div>
-
-            <!-- Additional Comments (Optional) -->
-            <div class="form-field" style="margin-top: 24px;">
-              <label for="additionalComments">Additional Comments (Optional)</label>
-              <textarea
-                id="additionalComments"
-                formControlName="additionalComments"
-                class="form-textarea"
-                rows="4"
-                maxlength="500"
-                placeholder="Any specific needs, questions, or feedback?"
-              ></textarea>
-              <div class="char-count">
-                {{ questionnaireForm.get('additionalComments')?.value?.length || 0 }} / 500
-              </div>
-            </div>
-          </div>
-
-          <div class="error-message" *ngIf="errorMessage">
-            {{ errorMessage }}
-          </div>
-        </div>
-
       </form>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
 
       <!-- Navigation Buttons -->
       <div class="button-group">
@@ -365,7 +281,7 @@
           </svg>
         </div>
 
-        <!-- Step 3: Screens Illustration -->
+        <!-- Step 3: Screens + Use Case Illustration -->
         <div class="illustration" *ngIf="currentStep === 3">
           <svg viewBox="0 0 400 400" class="monitor-illustration">
             <circle cx="200" cy="200" r="180" fill="#E8F5EE" opacity="0.5"/>
@@ -387,23 +303,8 @@
           </svg>
         </div>
 
-        <!-- Step 4: Use Case Illustration -->
+        <!-- Step 4: Technical Level Illustration -->
         <div class="illustration" *ngIf="currentStep === 4">
-          <svg viewBox="0 0 400 400" class="usecase-illustration">
-            <circle cx="200" cy="200" r="180" fill="#E8F5EE" opacity="0.5"/>
-            <circle cx="100" cy="120" r="50" fill="#B8E6CC" opacity="0.3"/>
-
-            <!-- Document/Screen -->
-            <rect x="130" y="140" width="140" height="180" rx="8" fill="white" stroke="#52C67A" stroke-width="3"/>
-            <rect x="150" y="170" width="100" height="12" rx="4" fill="#52C67A" opacity="0.3"/>
-            <rect x="150" y="195" width="100" height="12" rx="4" fill="#52C67A" opacity="0.5"/>
-            <rect x="150" y="220" width="80" height="12" rx="4" fill="#52C67A" opacity="0.3"/>
-            <rect x="150" y="260" width="100" height="40" rx="4" fill="#52C67A" opacity="0.7"/>
-          </svg>
-        </div>
-
-        <!-- Step 5: Technical Level Illustration -->
-        <div class="illustration" *ngIf="currentStep === 5">
           <svg viewBox="0 0 400 400" class="technical-illustration">
             <circle cx="200" cy="200" r="180" fill="#E8F5EE" opacity="0.5"/>
 
@@ -422,8 +323,8 @@
           </svg>
         </div>
 
-        <!-- Step 6: Features Illustration -->
-        <div class="illustration" *ngIf="currentStep === 6">
+        <!-- Step 5: Features Illustration -->
+        <div class="illustration" *ngIf="currentStep === 5">
           <svg viewBox="0 0 400 400" class="features-illustration">
             <circle cx="200" cy="200" r="180" fill="#E8F5EE" opacity="0.5"/>
 
@@ -436,8 +337,6 @@
             <rect x="280" y="220" width="60" height="60" rx="8" fill="#52C67A" opacity="0.4"/>
           </svg>
         </div>
-
-        <!-- Step 7: No illustration, summary on left -->
       </div>
     </div>
   </div>

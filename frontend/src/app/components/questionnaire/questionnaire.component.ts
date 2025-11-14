@@ -16,7 +16,7 @@ import { QuestionnaireResponse } from '../../models/response.model';
 })
 export class QuestionnaireComponent implements OnInit {
   currentStep = 1;
-  totalSteps = 7;
+  totalSteps = 5;
   questionnaireForm: FormGroup;
   loading = false;
   errorMessage = '';
@@ -404,9 +404,6 @@ export class QuestionnaireComponent implements OnInit {
       // Step 6: Feature Interests
       featureInterests: [[]],
 
-      // Step 7: Summary + Additional Comments
-      additionalComments: ['', Validators.maxLength(500)],
-
       // Optional fields
       screenLocations: ['']
     });
@@ -453,39 +450,14 @@ export class QuestionnaireComponent implements OnInit {
       case 2:
         return ['industry'];
       case 3:
-        return ['numberOfScreens'];
+        return ['numberOfScreens', 'primaryUseCase'];
       case 4:
-        return ['primaryUseCase'];
-      case 5:
         return ['technicalProficiency'];
-      case 6:
+      case 5:
         return []; // Feature interests are optional
-      case 7:
-        return []; // Summary page, no validation needed
       default:
         return [];
     }
-  }
-
-  // Helper to get summary data for step 7
-  getSummaryData() {
-    const formValue = this.questionnaireForm.value;
-    const industryObj = this.industries.find(i => i.value === formValue.industry);
-    const screenCountObj = this.screenCounts.find(s => s.value === formValue.numberOfScreens);
-    const useCaseObj = this.useCases.find(u => u.value === formValue.primaryUseCase);
-    const proficiencyObj = this.proficiencyLevels.find(p => p.value === formValue.technicalProficiency);
-
-    return {
-      companyName: formValue.companyName || '',
-      country: formValue.accountCountry || '',
-      companySize: formValue.companySize || '',
-      industry: industryObj?.label || '',
-      screenCount: screenCountObj?.label || '',
-      primaryUseCase: useCaseObj?.label || '',
-      technicalProficiency: proficiencyObj?.label || '',
-      currentPlatform: formValue.currentPlatform || 'None',
-      featureInterests: formValue.featureInterests || []
-    };
   }
 
   toggleFeature(feature: string): void {

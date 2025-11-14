@@ -32,25 +32,26 @@ import { AuthService } from '../../services/auth.service';
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
       padding: 20px;
     }
 
     .thank-you-card {
       background: white;
-      border-radius: 8px;
+      border-radius: 16px;
       padding: 60px 40px;
       max-width: 600px;
       width: 100%;
       text-align: center;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      border: 2px solid #e2e8f0;
     }
 
     .checkmark {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #52C67A 0%, #45B368 100%);
       color: white;
       font-size: 48px;
       display: flex;
@@ -58,65 +59,78 @@ import { AuthService } from '../../services/auth.service';
       justify-content: center;
       margin: 0 auto 30px auto;
       animation: scaleIn 0.5s ease-out;
+      box-shadow: 0 4px 12px rgba(82, 198, 122, 0.3);
     }
 
     @keyframes scaleIn {
       from {
         transform: scale(0);
+        opacity: 0;
       }
       to {
         transform: scale(1);
+        opacity: 1;
       }
     }
 
     h1 {
       font-size: 28px;
-      color: #333;
+      font-weight: 700;
+      color: #1a202c;
       margin: 0 0 20px 0;
+      line-height: 1.3;
     }
 
     .message {
       font-size: 16px;
-      color: #666;
+      color: #64748b;
       line-height: 1.6;
       margin: 0 0 16px 0;
     }
 
     .button-group {
       display: flex;
-      gap: 12px;
+      gap: 16px;
       justify-content: center;
       margin-top: 32px;
     }
 
     .btn {
-      padding: 12px 32px;
+      padding: 14px 32px;
       border: none;
-      border-radius: 4px;
+      border-radius: 10px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
       text-decoration: none;
+      font-family: inherit;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #52C67A 0%, #45B368 100%);
       color: white;
+      box-shadow: 0 4px 12px rgba(82, 198, 122, 0.3);
 
       &:hover {
-        opacity: 0.9;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(82, 198, 122, 0.4);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
 
     .btn-secondary {
       background: white;
-      color: #667eea;
-      border: 2px solid #667eea;
+      color: #64748b;
+      border: 2px solid #e2e8f0;
 
       &:hover {
-        background: #f8f9ff;
+        background: #f8f9fa;
+        border-color: #cbd5e0;
+        color: #2d3748;
       }
     }
   `]
