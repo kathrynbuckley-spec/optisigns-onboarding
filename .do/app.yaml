@@ -6,7 +6,7 @@ services:
   - name: backend
     source_dir: /backend
     github:
-      repo: YOUR_GITHUB_USERNAME/optisigns-onboarding
+      repo: kathrynbuckley-spec/optisigns-onboarding
       branch: main
       deploy_on_push: true
 
@@ -25,7 +25,7 @@ services:
       - key: PORT
         value: "8080"
       - key: JWT_SECRET
-        value: CHANGE_THIS_TO_SECURE_RANDOM_STRING
+        value: d0638e25d76e58b29c1fb63f32b49d949109916c488fb62e4b8486f8f16657047a72663a8a622d6069aa524c4847e0dd2e3567e3a8592e634db338effc979dfb
         type: SECRET
       - key: JWT_EXPIRES_IN
         value: 7d
@@ -45,7 +45,7 @@ services:
   - name: frontend
     source_dir: /frontend
     github:
-      repo: YOUR_GITHUB_USERNAME/optisigns-onboarding
+      repo: kathrynbuckley-spec/optisigns-onboarding
       branch: main
       deploy_on_push: true
 
