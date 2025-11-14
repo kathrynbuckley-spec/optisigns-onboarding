@@ -1,4 +1,4 @@
-# OptiSigns Onboarding Questionnaire
+# OptiSigns Onboarding Questionnaire - Project 1
 
 A full-stack onboarding questionnaire application built with **Angular**, **Express.js**, and **MongoDB**. This application demonstrates a complete user registration flow, multi-step form handling, authentication, and admin dashboard capabilities.
 
