@@ -16,11 +16,62 @@ import { QuestionnaireResponse } from '../../models/response.model';
 })
 export class QuestionnaireComponent implements OnInit {
   currentStep = 1;
-  totalSteps = 5;
+  totalSteps = 8;
   questionnaireForm: FormGroup;
   loading = false;
   errorMessage = '';
   submitted = false;
+
+  // Top countries for display
+  topCountries: string[] = [
+    'United States',
+    'Canada',
+    'United Kingdom',
+    'Australia',
+    'Germany'
+  ];
+
+  // All countries for display
+  allCountries: string[] = [
+    'Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica',
+    'Antigua And Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Austria', 'Azerbaijan',
+    'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda',
+    'Bhutan', 'Bolivia', 'Bosnia And Herzegovina', 'Botswana', 'Bouvet Island', 'Brazil',
+    'British Indian Ocean Territory', 'Brunei Darussalam', 'Bulgaria', 'Burkina Faso', 'Burundi',
+    'Cambodia', 'Cameroon', 'Cape Verde', 'Cayman Islands', 'Central African Republic', 'Chad',
+    'Chile', 'China', 'Christmas Island', 'Cocos (keeling) Islands', 'Colombia', 'Comoros', 'Congo',
+    'Congo, The Democratic Republic Of The', 'Cook Islands', 'Costa Rica', 'Cote D\'ivoire', 'Croatia',
+    'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic',
+    'East Timor', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia',
+    'Falkland Islands (malvinas)', 'Faroe Islands', 'Fiji', 'Finland', 'France', 'French Guiana',
+    'French Polynesia', 'French Southern Territories', 'Gabon', 'Gambia', 'Georgia', 'Ghana',
+    'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guinea',
+    'Guinea-bissau', 'Guyana', 'Haiti', 'Heard Island And Mcdonald Islands', 'Holy See (vatican City State)',
+    'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran, Islamic Republic Of',
+    'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jordan', 'Kazakstan', 'Kenya', 'Kiribati',
+    'Korea, Democratic People\'s Republic Of', 'Korea, Republic Of', 'Kosovo', 'Kuwait', 'Kyrgyzstan',
+    'Lao People\'s Democratic Republic', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libyan Arab Jamahiriya',
+    'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macau', 'Macedonia, The Former Yugoslav Republic Of',
+    'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Martinique',
+    'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Micronesia, Federated States Of', 'Moldova, Republic Of',
+    'Monaco', 'Mongolia', 'Montserrat', 'Montenegro', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia',
+    'Nauru', 'Nepal', 'Netherlands', 'Netherlands Antilles', 'New Caledonia', 'New Zealand', 'Nicaragua',
+    'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'Northern Mariana Islands', 'Norway', 'Oman',
+    'Pakistan', 'Palau', 'Palestinian Territory, Occupied', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru',
+    'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Reunion', 'Romania',
+    'Russian Federation', 'Rwanda', 'Saint Helena', 'Saint Kitts And Nevis', 'Saint Lucia',
+    'Saint Pierre And Miquelon', 'Saint Vincent And The Grenadines', 'Samoa', 'San Marino',
+    'Sao Tome And Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone',
+    'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa',
+    'South Georgia And The South Sandwich Islands', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname',
+    'Svalbard And Jan Mayen', 'Swaziland', 'Sweden', 'Switzerland', 'Syrian Arab Republic',
+    'Taiwan, Province Of China', 'Tajikistan', 'Tanzania, United Republic Of', 'Thailand', 'Togo',
+    'Tokelau', 'Tonga', 'Trinidad And Tobago', 'Tunisia', 'Turkey', 'Turkmenistan',
+    'Turks And Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates',
+    'United States Minor Outlying Islands', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Venezuela',
+    'Viet Nam', 'Virgin Islands, British', 'Virgin Islands, U.s.', 'Wallis And Futuna',
+    'Western Sahara', 'Yemen', 'Zambia', 'Zimbabwe'
+  ];
 
   // Country selection with grouping - flat array with group property
   countriesGrouped = [
@@ -270,18 +321,37 @@ export class QuestionnaireComponent implements OnInit {
     { name: 'Zimbabwe', group: 'All Countries' }
   ];
 
+  // Company sizes
   companySizes = ['1-10', '11-50', '51-200', '201-500', '500+'];
+
+  // Industries
   industries = [
-    { value: 'retail', label: 'Retail' },
-    { value: 'healthcare', label: 'Healthcare' },
-    { value: 'education', label: 'Education' },
-    { value: 'hospitality', label: 'Hospitality' },
-    { value: 'corporate', label: 'Corporate/Office' },
-    { value: 'transportation', label: 'Transportation' },
-    { value: 'government', label: 'Government' },
-    { value: 'other', label: 'Other' }
+    { value: 'retail', label: 'Retail', icon: '🏪' },
+    { value: 'corporate', label: 'Corporate', icon: '🏢' },
+    { value: 'education', label: 'Education', icon: '🎓' },
+    { value: 'healthcare', label: 'Healthcare', icon: '❤️' },
+    { value: 'hospitality', label: 'Hospitality', icon: '🍴' },
+    { value: 'professional-services', label: 'Professional Services', icon: '💼' },
+    { value: 'real-estate', label: 'Real Estate', icon: '🏠' },
+    { value: 'technology', label: 'Technology', icon: '💻' }
   ];
 
+  // Screen counts
+  screenCounts = [
+    { value: '1-5', label: '1-5 screens', description: 'Small deployment', icon: '📺' },
+    { value: '6-20', label: '6-20 screens', description: 'Medium deployment', icon: '📺' },
+    { value: '21-50', label: '21-50 screens', description: 'Large deployment', icon: '📺' },
+    { value: '51-100', label: '51-100 screens', description: 'Enterprise scale', icon: '📺' },
+    { value: '100+', label: '100+ screens', description: 'Enterprise scale+', icon: '📺' }
+  ];
+
+  // Usage types
+  usageTypes = [
+    { value: 'internal', label: 'Internal', description: 'For employees and internal communications', icon: '🏢' },
+    { value: 'external', label: 'External', description: 'For customers and public-facing displays', icon: '👥' }
+  ];
+
+  // Use cases
   useCases = [
     { value: 'menu-boards', label: 'Menu Boards', icon: '📋' },
     { value: 'wayfinding', label: 'Wayfinding & Directories', icon: '🗺️' },
@@ -292,14 +362,14 @@ export class QuestionnaireComponent implements OnInit {
     { value: 'other', label: 'Other', icon: '✏️' }
   ];
 
-  screenCounts = ['1-5', '6-20', '21-50', '51-100', '100+'];
-
+  // Technical proficiency levels
   proficiencyLevels = [
     { value: 'beginner', label: 'Beginner', description: 'I\'m new to digital signage', icon: '🌱' },
     { value: 'intermediate', label: 'Intermediate', description: 'I have some experience with similar tools', icon: '🌿' },
     { value: 'advanced', label: 'Advanced', description: 'I\'m very comfortable with technology', icon: '🌳' }
   ];
 
+  // Features
   features = [
     { value: 'scheduling', label: 'Content Scheduling', icon: '⏰' },
     { value: 'multi-zone', label: 'Multi-Zone Layouts', icon: '🖼️' },
@@ -318,27 +388,37 @@ export class QuestionnaireComponent implements OnInit {
     private router: Router
   ) {
     this.questionnaireForm = this.fb.group({
-      // Step 1
+      // Step 1: Country + Company Name + Company Size
       accountCountry: ['', Validators.required],
       companyName: ['', Validators.required],
       companySize: ['', Validators.required],
+
+      // Step 2: Industry
       industry: ['', Validators.required],
 
-      // Step 2
+      // Step 3: Screen Count
+      numberOfScreens: ['', Validators.required],
+
+      // Step 4: Usage Type
+      usageType: ['', Validators.required],
+
+      // Step 5: Primary Use Case
       primaryUseCase: ['', Validators.required],
       useCaseDescription: [''],
 
-      // Step 3
-      numberOfScreens: ['', Validators.required],
-      screenLocations: [''],
-
-      // Step 4
+      // Step 6: Technical Proficiency + Current Platform
       technicalProficiency: ['', Validators.required],
       currentPlatform: [''],
 
-      // Step 5
+      // Step 7: Feature Interests
       featureInterests: [[]],
-      additionalComments: ['', Validators.maxLength(500)]
+
+      // Step 8: Summary + AI Toggle + Additional Comments
+      aiSuggestionsEnabled: [true], // Default to true (ON)
+      additionalComments: ['', Validators.maxLength(500)],
+
+      // Optional fields
+      screenLocations: ['']
     });
   }
 
@@ -379,18 +459,47 @@ export class QuestionnaireComponent implements OnInit {
   getStepControls(): string[] {
     switch (this.currentStep) {
       case 1:
-        return ['accountCountry', 'companyName', 'companySize', 'industry'];
+        return ['accountCountry', 'companyName', 'companySize'];
       case 2:
-        return ['primaryUseCase'];
+        return ['industry'];
       case 3:
         return ['numberOfScreens'];
       case 4:
-        return ['technicalProficiency'];
+        return ['usageType'];
       case 5:
-        return [];
+        return ['primaryUseCase'];
+      case 6:
+        return ['technicalProficiency'];
+      case 7:
+        return []; // Feature interests are optional
+      case 8:
+        return []; // Summary page, no validation needed
       default:
         return [];
     }
+  }
+
+  // Helper to get summary data for step 8
+  getSummaryData() {
+    const formValue = this.questionnaireForm.value;
+    const industryObj = this.industries.find(i => i.value === formValue.industry);
+    const screenCountObj = this.screenCounts.find(s => s.value === formValue.numberOfScreens);
+    const usageTypeObj = this.usageTypes.find(u => u.value === formValue.usageType);
+    const useCaseObj = this.useCases.find(u => u.value === formValue.primaryUseCase);
+    const proficiencyObj = this.proficiencyLevels.find(p => p.value === formValue.technicalProficiency);
+
+    return {
+      companyName: formValue.companyName || '',
+      country: formValue.accountCountry || '',
+      companySize: formValue.companySize || '',
+      industry: industryObj?.label || '',
+      screenCount: screenCountObj?.label || '',
+      usageType: usageTypeObj?.label || '',
+      primaryUseCase: useCaseObj?.label || '',
+      technicalProficiency: proficiencyObj?.label || '',
+      currentPlatform: formValue.currentPlatform || 'None',
+      featureInterests: formValue.featureInterests || []
+    };
   }
 
   toggleFeature(feature: string): void {

@@ -60,12 +60,12 @@ import { AuthService } from '../../services/auth.service';
             </div>
           </div>
 
-          <div class="error-message" *ngIf="errorMessage">
+          <div class="error-message" *ngIf="errorMessage" style="background: #fee; padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #fcc;">
             {{ errorMessage }}
           </div>
 
           <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid || loading">
-            <span *ngIf="!loading">Register</span>
+            <span *ngIf="!loading">{{ errorMessage ? 'Try Again' : 'Register' }}</span>
             <span *ngIf="loading">Creating account...</span>
           </button>
         </form>
@@ -302,7 +302,7 @@ export class RegisterComponent {
   onSubmit(): void {
     if (this.registerForm.valid) {
       this.loading = true;
-      this.errorMessage = '';
+      this.errorMessage = ''; // Clear any previous errors
 
       const { email, password } = this.registerForm.value;
 
@@ -312,12 +312,20 @@ export class RegisterComponent {
           if (response.success) {
             // Navigate to questionnaire after successful registration
             this.router.navigate(['/questionnaire']);
+          } else {
+            this.errorMessage = 'Registration failed. Please try again.';
           }
         },
         error: (error) => {
           this.loading = false;
-          this.errorMessage = error.error?.error || 'Registration failed. Please try again.';
+          console.error('Registration error:', error);
+          this.errorMessage = error.error?.error || error.message || 'Registration failed. Please check your connection and try again.';
         }
+      });
+    } else {
+      // Mark all fields as touched to show validation errors
+      Object.keys(this.registerForm.controls).forEach(key => {
+        this.registerForm.get(key)?.markAsTouched();
       });
     }
   }
