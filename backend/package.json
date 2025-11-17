@@ -9,8 +9,8 @@
     "seed": "node seed.js"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": "20.x",
+    "npm": "10.x"
   },
   "keywords": ["express", "mongodb", "jwt", "authentication"],
   "author": "",
