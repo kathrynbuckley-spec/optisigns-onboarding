@@ -24,21 +24,26 @@ services:
         value: "d0638e25d76e58b29c1fb63f32b49d949109916c488fb62e4b8486f8f16657047a72663a8a622d6069aa524c4847e0dd2e3567e3a8592e634db338effc979dfb"
         type: SECRET
       - key: JWT_EXPIRES_IN
-        value: 7d
+        value: "7d"
       - key: MONGODB_URI
         value: "mongodb+srv://kathrynbuckley_db_user:KKwx8mSwKDXTKmSL@cluster0.f7fzwx8.mongodb.net/optisigns-onboarding?retryWrites=true&w=majority&appName=Cluster0"
         type: SECRET
       - key: CORS_ORIGIN
+        scope: RUN_AND_BUILD_TIME
         value: "${frontend.PUBLIC_URL}"
 
     health_check:
       http_path: /api/health
-      initial_delay_seconds: 30
+      initial_delay_seconds: 40
       period_seconds: 10
       timeout_seconds: 5
       failure_threshold: 3
+      success_threshold: 1
 
-  # Frontend Static Site
+    routes:
+      - path: /api
+
+  # Frontend Web Service
   - name: frontend
     git:
       repo_clone_url: https://github.com/kathrynbuckley-spec/optisigns-onboarding.git
@@ -53,4 +58,8 @@ services:
 
     envs:
       - key: API_URL
+        scope: RUN_AND_BUILD_TIME
         value: "${backend.PUBLIC_URL}/api"
+
+    routes:
+      - path: /
