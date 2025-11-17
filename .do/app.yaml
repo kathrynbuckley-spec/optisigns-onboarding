@@ -18,13 +18,13 @@ ingress:
 services:
   # Backend API Service
   - name: backend
-    source_dir: backend
     github:
       repo: kathrynbuckley-spec/optisigns-onboarding
       branch: main
       deploy_on_push: true
 
-    dockerfile_path: Dockerfile
+    dockerfile_path: backend/Dockerfile
+    source_dir: backend
 
     instance_count: 1
     instance_size_slug: basic-xxs
@@ -55,13 +55,13 @@ services:
 
   # Frontend Static Site
   - name: frontend
-    source_dir: frontend
     github:
       repo: kathrynbuckley-spec/optisigns-onboarding
       branch: main
       deploy_on_push: true
 
-    dockerfile_path: Dockerfile
+    dockerfile_path: frontend/Dockerfile
+    source_dir: frontend
 
     instance_count: 1
     instance_size_slug: basic-xxs
