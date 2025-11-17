@@ -61,6 +61,3 @@ services:
     envs:
       - key: API_URL
         value: ${backend.PUBLIC_URL}/api
-
-    routes:
-      - path: /
