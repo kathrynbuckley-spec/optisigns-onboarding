@@ -1,20 +1,6 @@
 name: optisigns-onboarding
 region: nyc
 
-# Routing configuration
-ingress:
-  rules:
-    - match:
-        path:
-          prefix: /api
-      component:
-        name: backend
-    - match:
-        path:
-          prefix: /
-      component:
-        name: frontend
-
 services:
   # Backend API Service
   - name: backend
@@ -45,7 +31,7 @@ services:
         value: mongodb+srv://kathrynbuckley_db_user:KKwx8mSwKDXTKmSL@cluster0.f7fzwx8.mongodb.net/optisigns-onboarding?retryWrites=true&w=majority&appName=Cluster0
         type: SECRET
       - key: CORS_ORIGIN
-        value: ${APP_URL}
+        value: ${frontend.PUBLIC_URL}
 
     health_check:
       http_path: /api/health
@@ -70,4 +56,4 @@ services:
 
     envs:
       - key: API_URL
-        value: ${APP_URL}/api
+        value: ${backend.PUBLIC_URL}/api
