@@ -315,24 +315,35 @@ curl -X POST http://localhost:3000/api/responses \
 
 ## Deployment to Digital Ocean
 
-This repository is optimized for **Digital Ocean App Platform** deployment with a pre-configured app spec file.
+This repository is optimized for **Digital Ocean App Platform** deployment with Docker and a pre-configured app spec file.
+
+### Pre-Deployment Validation
+
+**Before deploying, run the validation script:**
+```bash
+./validate-deployment.sh
+```
+
+This ensures your repository is properly configured for deployment.
 
 ### Quick Deploy
 
-1. Push code to GitHub
-2. Go to [Digital Ocean Apps](https://cloud.digitalocean.com/apps)
-3. Create new app from your GitHub repository
-4. Use the included `.do/app.yaml` app spec file
-5. Both frontend and backend will deploy automatically
+1. Run validation: `./validate-deployment.sh`
+2. Push code to GitHub
+3. Go to [Digital Ocean Apps](https://cloud.digitalocean.com/apps)
+4. Create new app from your GitHub repository
+5. Use the included `app.yaml` app spec file
+6. Both frontend and backend will deploy automatically as Docker services
 
 ### Detailed Instructions
 
-See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for complete step-by-step deployment instructions including:
+See **[DEPLOY_DIGITALOCEAN.md](./DEPLOY_DIGITALOCEAN.md)** for complete step-by-step deployment instructions including:
+- Pre-deployment validation
 - Using the App Spec file
 - Configuring environment variables
-- MongoDB Atlas setup
-- Custom domain configuration
-- Troubleshooting tips
+- Health checks and monitoring
+- Comprehensive troubleshooting guide
+- Common deployment issues and solutions
 
 ### Local Build for Production
 

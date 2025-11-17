@@ -13,10 +13,36 @@ connectDB();
 
 // Middleware
 app.use(helmet()); // Security headers
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:4200',
+
+// CORS Configuration - supports both exact match and Digital Ocean URLs
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = [
+      process.env.CORS_ORIGIN,
+      'http://localhost:4200',
+      'http://localhost:3000'
+    ].filter(Boolean);
+
+    // Check exact match
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Allow all Digital Ocean app platform URLs (*.ondigitalocean.app)
+    if (origin.endsWith('.ondigitalocean.app')) {
+      return callback(null, true);
+    }
+
+    // Reject other origins
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' })); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Parse URL-encoded bodies
 app.use(mongoSanitize()); // Prevent NoSQL injection
