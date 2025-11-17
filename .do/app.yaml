@@ -24,10 +24,8 @@ services:
       branch: main
       deploy_on_push: true
 
-    build_command: npm install
-    run_command: npm start
+    dockerfile_path: Dockerfile
 
-    environment_slug: node-js
     instance_count: 1
     instance_size_slug: basic-xxs
 
@@ -38,10 +36,6 @@ services:
         value: production
       - key: PORT
         value: "8080"
-      - key: USE_NPM_INSTALL
-        value: "true"
-      - key: NPM_CONFIG_PRODUCTION
-        value: "false"
       - key: JWT_SECRET
         value: d0638e25d76e58b29c1fb63f32b49d949109916c488fb62e4b8486f8f16657047a72663a8a622d6069aa524c4847e0dd2e3567e3a8592e634db338effc979dfb
         type: SECRET
@@ -67,19 +61,13 @@ services:
       branch: main
       deploy_on_push: true
 
-    build_command: npm install && npm run build
-    run_command: npx http-server dist/frontend/browser -p 8080 -c-1 --proxy http://localhost:8080?
+    dockerfile_path: Dockerfile
 
-    environment_slug: node-js
     instance_count: 1
     instance_size_slug: basic-xxs
 
     http_port: 8080
 
     envs:
-      - key: USE_NPM_INSTALL
-        value: "true"
-      - key: NPM_CONFIG_PRODUCTION
-        value: "false"
       - key: API_URL
         value: ${APP_URL}/api
