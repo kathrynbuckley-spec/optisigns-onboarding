@@ -1,2 +1,0 @@
-# Explicitly disable buildpack detection
-# This repository uses Dockerfiles for deployment

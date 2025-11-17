@@ -1,8 +1,11 @@
 {
   "name": "optisigns-onboarding-monorepo",
   "version": "1.0.0",
-  "description": "OptiSigns Onboarding Application - Full Stack Monorepo",
+  "description": "OptiSigns Onboarding Application - Full Stack Monorepo - Deploy using app.yaml",
   "private": true,
+  "digitalocean": {
+    "spec": "app.yaml"
+  },
   "workspaces": [
     "frontend",
     "backend"
