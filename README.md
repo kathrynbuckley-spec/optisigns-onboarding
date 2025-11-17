@@ -34,9 +34,15 @@ A full-stack onboarding questionnaire application built with **Angular**, **Expr
 
 ## Project Structure
 
+This is a **monorepo** containing both frontend and backend applications, optimized for Digital Ocean deployment.
+
 ```
 optisigns-onboarding/
-├── backend/
+├── package.json                  # Root package with workspace scripts
+├── start-dev.sh                  # Quick development startup script
+├── .dockerignore                 # Docker build optimization
+│
+├── backend/                      # Express.js API
 │   ├── config/
 │   │   └── database.js          # MongoDB connection
 │   ├── middleware/
@@ -54,22 +60,27 @@ optisigns-onboarding/
 │   ├── seed.js                   # Database seeding script
 │   └── server.js                 # Express server
 │
-├── frontend/
-│   └── src/
-│       └── app/
-│           ├── components/
-│           │   ├── auth/         # Login & Register components
-│           │   ├── questionnaire/ # Multi-step questionnaire
-│           │   └── admin/        # Admin dashboard
-│           ├── guards/
-│           │   └── auth.guard.ts # Route protection
-│           ├── interceptors/
-│           │   └── auth.interceptor.ts # JWT attachment
-│           ├── models/           # TypeScript interfaces
-│           ├── services/         # API & Auth services
-│           └── environments/     # Environment config
+├── frontend/                     # Angular application
+│   ├── src/
+│   │   └── app/
+│   │       ├── components/
+│   │       │   ├── auth/         # Login & Register components
+│   │       │   ├── questionnaire/ # Multi-step questionnaire
+│   │       │   └── admin/        # Admin dashboard
+│   │       ├── guards/
+│   │       │   └── auth.guard.ts # Route protection
+│   │       ├── interceptors/
+│   │       │   └── auth.interceptor.ts # JWT attachment
+│   │       ├── models/           # TypeScript interfaces
+│   │       ├── services/         # API & Auth services
+│   │       └── environments/     # Environment config
+│   └── package.json
 │
-└── PLAN.md                       # Detailed implementation plan
+├── .do/
+│   └── app.yaml                  # Digital Ocean App Spec
+│
+├── DEPLOYMENT.md                 # Detailed deployment guide
+└── PLAN.md                       # Implementation plan
 ```
 
 ## Prerequisites
@@ -78,53 +89,71 @@ optisigns-onboarding/
 - **npm** (v9 or higher)
 - **MongoDB** (local installation or MongoDB Atlas account)
 
-## Setup Instructions
+## Quick Start
 
-### 1. Clone the Repository
+### Option 1: Quick Start Script (Recommended)
 
 ```bash
 cd optisigns-onboarding
+
+# Run the startup script (installs dependencies and starts both services)
+./start-dev.sh
 ```
 
-### 2. Backend Setup
+The script will:
+- Check for Node.js installation
+- Install all dependencies if needed
+- Create a default `.env` file for backend
+- Start both backend (port 3000) and frontend (port 4200)
+
+### Option 2: Manual Setup
+
+#### 1. Install All Dependencies
 
 ```bash
+cd optisigns-onboarding
+
+# Install all dependencies (root, backend, frontend)
+npm run install:all
+```
+
+#### 2. Configure Backend Environment
+
+```bash
+# Create backend/.env file if it doesn't exist
 cd backend
 
-# Install dependencies
-npm install
-
-# Configure environment variables
 # Edit the .env file with your MongoDB connection string
 # For local MongoDB:
 MONGODB_URI=mongodb://localhost:27017/optisigns-onboarding
 
-# For MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/optisigns-onboarding
-
-# Seed the database with demo data
-npm run seed
-
-# Start the backend server
-npm run dev
+# For MongoDB Atlas (already configured):
+MONGODB_URI=mongodb+srv://kathrynbuckley_db_user:KKwx8mSwKDXTKmSL@cluster0.f7fzwx8.mongodb.net/optisigns-onboarding
 ```
 
-The backend will run on `http://localhost:3000`
-
-### 3. Frontend Setup
+#### 3. Seed Database (Optional)
 
 ```bash
-# Open a new terminal
-cd frontend
+# From the backend directory
+npm run seed
 
-# Install dependencies
-npm install
-
-# Start the development server
-npm start
+# Or from root
+npm run seed
 ```
 
-The frontend will run on `http://localhost:4200`
+#### 4. Start Development Servers
+
+```bash
+# From root directory - starts both services
+npm run dev
+
+# Or start individually:
+npm run dev:backend   # Backend only
+npm run dev:frontend  # Frontend only
+```
+
+- **Backend**: `http://localhost:3000`
+- **Frontend**: `http://localhost:4200`
 
 ## Demo Credentials
 
@@ -284,28 +313,37 @@ curl -X POST http://localhost:3000/api/responses \
 }
 ```
 
-## Deployment
+## Deployment to Digital Ocean
 
-### Backend Deployment (Digital Ocean, Heroku, etc.)
+This repository is optimized for **Digital Ocean App Platform** deployment with a pre-configured app spec file.
 
-1. Set environment variables:
-   - `MONGODB_URI`
-   - `JWT_SECRET`
-   - `PORT`
-   - `CORS_ORIGIN`
+### Quick Deploy
 
-2. Update start script in package.json
-3. Deploy backend
-4. Note the deployed backend URL
+1. Push code to GitHub
+2. Go to [Digital Ocean Apps](https://cloud.digitalocean.com/apps)
+3. Create new app from your GitHub repository
+4. Use the included `.do/app.yaml` app spec file
+5. Both frontend and backend will deploy automatically
 
-### Frontend Deployment
+### Detailed Instructions
 
-1. Update `frontend/src/environments/environment.prod.ts` with backend URL
-2. Build for production:
-   ```bash
-   npm run build
-   ```
-3. Deploy the `dist/` folder to hosting service
+See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for complete step-by-step deployment instructions including:
+- Using the App Spec file
+- Configuring environment variables
+- MongoDB Atlas setup
+- Custom domain configuration
+- Troubleshooting tips
+
+### Local Build for Production
+
+```bash
+# Build both frontend and backend
+npm run build
+
+# This will:
+# - Install production dependencies in backend
+# - Build frontend for production (output: frontend/dist/)
+```
 
 ## Troubleshooting
 

@@ -4,13 +4,13 @@ region: nyc
 services:
   # Backend API Service
   - name: backend
-    source_dir: /backend
+    source_dir: backend
     github:
       repo: kathrynbuckley-spec/optisigns-onboarding
       branch: main
       deploy_on_push: true
 
-    build_command: npm ci
+    build_command: npm install --production
     run_command: npm start
 
     environment_slug: node-js
@@ -43,13 +43,13 @@ services:
 
   # Frontend Static Site
   - name: frontend
-    source_dir: /frontend
+    source_dir: frontend
     github:
       repo: kathrynbuckley-spec/optisigns-onboarding
       branch: main
       deploy_on_push: true
 
-    build_command: npm ci --include=dev && npm run build
+    build_command: npm install && npm run build
     run_command: npx http-server dist/frontend/browser -p 8080 -c-1 --proxy http://localhost:8080?
 
     environment_slug: node-js

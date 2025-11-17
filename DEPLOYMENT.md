@@ -2,6 +2,23 @@
 
 This guide will walk you through deploying the OptiSigns Onboarding application to Digital Ocean App Platform.
 
+## Repository Structure
+
+This is a monorepo containing both frontend and backend applications:
+
+```
+optisigns-onboarding/
+├── package.json          # Root package with workspace scripts
+├── frontend/             # Angular application
+│   ├── package.json
+│   └── src/
+├── backend/              # Express API
+│   ├── package.json
+│   └── server.js
+└── .do/
+    └── app.yaml          # Digital Ocean App Spec
+```
+
 ## Prerequisites
 
 1. **Digital Ocean Account** - Sign up at https://www.digitalocean.com/
@@ -33,7 +50,9 @@ git branch -M main
 git push -u origin main
 ```
 
-### Step 2: Deploy Backend to Digital Ocean
+### Step 2: Deploy to Digital Ocean (Using App Spec)
+
+**Recommended Method**: Use the included App Spec file (`.do/app.yaml`)
 
 1. **Go to Digital Ocean Dashboard**
    - Navigate to: https://cloud.digitalocean.com/apps
@@ -43,76 +62,42 @@ git push -u origin main
    - Choose "GitHub" as source
    - Authorize Digital Ocean to access your GitHub
    - Select your `optisigns-onboarding` repository
+   - Select the `main` branch
 
-3. **Configure Backend**
-   - **Source Directory**: `/backend`
-   - **Build Command**: `npm install`
-   - **Run Command**: `npm start`
-   - **HTTP Port**: `8080` (Digital Ocean uses 8080)
-   - **Environment Variables**: Click "Edit" and add:
-     ```
-     PORT=8080
-     NODE_ENV=production
-     JWT_SECRET=<generate-a-secure-random-string>
-     JWT_EXPIRES_IN=7d
-     MONGODB_URI=mongodb+srv://kathrynbuckley_db_user:KKwx8mSwKDXTKmSL@cluster0.f7fzwx8.mongodb.net/optisigns-onboarding?retryWrites=true&w=majority&appName=Cluster0
-     CORS_ORIGIN=<will-be-frontend-url>
-     ```
+3. **Import App Spec**
+   - Look for "Edit App Spec" or "Use existing spec"
+   - Upload or paste the contents of `.do/app.yaml`
+   - Digital Ocean will automatically configure both services:
+     - **Backend**: Source directory `backend/`, builds and runs the Express API
+     - **Frontend**: Source directory `frontend/`, builds and serves the Angular app
 
-4. **Choose Plan**
-   - Select "Basic" plan ($5/month)
-   - 512 MB RAM / 1 vCPU
+4. **Review Configuration**
+   - Verify both services are detected
+   - Check that environment variables are set (they're in the app.yaml)
+   - Backend will be at: `https://backend-{app-name}.ondigitalocean.app`
+   - Frontend will be at: `https://frontend-{app-name}.ondigitalocean.app`
 
-5. **Name Your App**
-   - Name: `optisigns-backend`
+5. **Update Sensitive Environment Variables**
+   - Go to Settings → Environment Variables
+   - Update the JWT_SECRET with a secure value (see Step 3)
+   - Update MONGODB_URI if needed
 
-6. **Click "Create Resources"**
+6. **Deploy**
+   - Click "Create Resources"
    - Wait for deployment (takes 3-5 minutes)
-   - Note the backend URL (e.g., `https://optisigns-backend-xxxxx.ondigitalocean.app`)
+   - Both frontend and backend will deploy simultaneously
 
-### Step 3: Update Backend CORS Settings
+### Step 3: Generate Secure JWT Secret
 
-1. **Go to your backend app settings**
-2. **Edit Environment Variables**
-3. **Update `CORS_ORIGIN`** with your frontend URL (will get this in next step)
+Run this command locally to generate a secure JWT secret:
 
-### Step 4: Deploy Frontend to Digital Ocean
+```bash
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+```
 
-1. **Create Another App**
-   - Click "Create" → "Apps"
-   - Select same GitHub repository
+Then update the `JWT_SECRET` environment variable in Digital Ocean settings.
 
-2. **Configure Frontend**
-   - **Source Directory**: `/frontend`
-   - **Build Command**: `npm install && npm run build`
-   - **Run Command**: `npx http-server dist/frontend/browser -p 8080`
-   - **HTTP Port**: `8080`
-   - **Environment Variables**: Add:
-     ```
-     API_URL=<your-backend-url>/api
-     ```
-     (e.g., `https://optisigns-backend-xxxxx.ondigitalocean.app/api`)
-
-3. **Add http-server Dependency**
-   - We need to add http-server to package.json first
-
-4. **Choose Plan**
-   - Select "Basic" plan ($5/month)
-
-5. **Name Your App**
-   - Name: `optisigns-frontend`
-
-6. **Click "Create Resources"**
-   - Note the frontend URL (e.g., `https://optisigns-frontend-xxxxx.ondigitalocean.app`)
-
-### Step 5: Update Backend CORS
-
-1. Go back to backend app settings
-2. Edit `CORS_ORIGIN` environment variable
-3. Set it to your frontend URL: `https://optisigns-frontend-xxxxx.ondigitalocean.app`
-4. Save and redeploy
-
-### Step 6: Configure MongoDB Atlas Network Access
+### Step 4: Configure MongoDB Atlas Network Access
 
 1. **Go to MongoDB Atlas Dashboard**
 2. **Click "Network Access"** in left sidebar
@@ -121,7 +106,7 @@ git push -u origin main
    - Or add specific Digital Ocean IP ranges for better security
 5. **Click "Confirm"**
 
-### Step 7: Test Your Deployment
+### Step 5: Test Your Deployment
 
 Visit your frontend URL and test:
 - User registration
@@ -129,13 +114,45 @@ Visit your frontend URL and test:
 - Questionnaire submission
 - Admin dashboard
 
-## Alternative: Deploy Both Apps Together (Monorepo)
+## Local Development
 
-Digital Ocean can deploy both frontend and backend from the same repository as separate components.
+The repository includes helpful npm scripts for local development:
 
-### Create App Spec File
+```bash
+# Install all dependencies (root, frontend, backend)
+npm run install:all
 
-See `.do/app.yaml` in your repository for the complete configuration.
+# Run both frontend and backend in development mode
+npm run dev
+
+# Run backend only (with nodemon for auto-reload)
+npm run dev:backend
+
+# Run frontend only
+npm run dev:frontend
+
+# Build for production
+npm run build
+
+# Seed the database with test data
+npm run seed
+```
+
+## Manual Deployment (Alternative)
+
+If you prefer to configure each service manually instead of using the app spec:
+
+1. Create two separate apps in Digital Ocean
+2. For Backend:
+   - Source Directory: `backend`
+   - Build Command: `npm install --production`
+   - Run Command: `npm start`
+   - Port: 8080
+3. For Frontend:
+   - Source Directory: `frontend`
+   - Build Command: `npm install && npm run build`
+   - Run Command: `npx http-server dist/frontend/browser -p 8080 -c-1`
+   - Port: 8080
 
 ## Troubleshooting
 
