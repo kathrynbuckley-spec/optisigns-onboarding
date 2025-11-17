@@ -4,11 +4,6 @@ region: nyc
 services:
   # Backend API Service
   - name: backend
-    github:
-      repo: kathrynbuckley-spec/optisigns-onboarding
-      branch: main
-      deploy_on_push: true
-
     source_dir: backend
     dockerfile_path: Dockerfile
 
@@ -42,11 +37,6 @@ services:
 
   # Frontend Static Site
   - name: frontend
-    github:
-      repo: kathrynbuckley-spec/optisigns-onboarding
-      branch: main
-      deploy_on_push: true
-
     source_dir: frontend
     dockerfile_path: Dockerfile
 
