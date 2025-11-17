@@ -8,11 +8,11 @@ services:
       repo_clone_url: https://github.com/kathrynbuckley-spec/optisigns-onboarding.git
       branch: main
 
-    # Path to the directory containing the application code
-    source_dir: /backend
+    # Path to the directory containing the application code (relative to repo root)
+    source_dir: backend
 
     # Path to Dockerfile relative to repository root
-    dockerfile_path: /backend/Dockerfile
+    dockerfile_path: backend/Dockerfile
 
     instance_count: 1
     instance_size_slug: basic-xxs
@@ -53,11 +53,11 @@ services:
       repo_clone_url: https://github.com/kathrynbuckley-spec/optisigns-onboarding.git
       branch: main
 
-    # Path to the directory containing the application code
-    source_dir: /frontend
+    # Path to the directory containing the application code (relative to repo root)
+    source_dir: frontend
 
     # Path to Dockerfile relative to repository root
-    dockerfile_path: /frontend/Dockerfile
+    dockerfile_path: frontend/Dockerfile
 
     instance_count: 1
     instance_size_slug: basic-xxs
