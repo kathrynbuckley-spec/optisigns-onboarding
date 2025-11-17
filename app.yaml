@@ -4,6 +4,9 @@ region: nyc
 services:
   # Backend API Service
   - name: backend
+    git:
+      repo_clone_url: https://github.com/kathrynbuckley-spec/optisigns-onboarding.git
+      branch: main
     source_dir: backend
     dockerfile_path: Dockerfile
 
@@ -37,6 +40,9 @@ services:
 
   # Frontend Static Site
   - name: frontend
+    git:
+      repo_clone_url: https://github.com/kathrynbuckley-spec/optisigns-onboarding.git
+      branch: main
     source_dir: frontend
     dockerfile_path: Dockerfile
 
