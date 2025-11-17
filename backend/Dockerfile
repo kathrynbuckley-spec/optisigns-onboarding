@@ -14,5 +14,8 @@ COPY . .
 # Expose port
 EXPOSE 8080
 
-# Start the application
-CMD ["npm", "start"]
+# Set environment to production
+ENV NODE_ENV=production
+
+# Start the application directly with node
+CMD ["node", "server.js"]
