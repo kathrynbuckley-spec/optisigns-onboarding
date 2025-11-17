@@ -51,7 +51,7 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// Index for faster email lookups
-userSchema.index({ email: 1 });
+// Note: Email index is already created by the unique: true constraint above
+// No need for additional index on email field
 
 module.exports = mongoose.model('User', userSchema);

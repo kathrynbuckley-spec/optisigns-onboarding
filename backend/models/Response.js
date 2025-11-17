@@ -5,8 +5,8 @@ const responseSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
-    index: true
+    required: true
+    // Note: index is created by the unique constraint below (line 97)
   },
   email: {
     type: String,
