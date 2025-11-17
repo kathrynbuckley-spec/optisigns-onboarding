@@ -2,11 +2,12 @@ name: optisigns-onboarding
 region: nyc
 services:
 - name: backend
-  git:
-    repo_clone_url: https://github.com/kathrynbuckley-spec/optisigns-onboarding.git
+  github:
+    repo: kathrynbuckley-spec/optisigns-onboarding
     branch: main
+    deploy_on_push: true
   source_dir: backend
-  dockerfile_path: Dockerfile
+  dockerfile_path: backend/Dockerfile
   instance_count: 1
   instance_size_slug: basic-xxs
   http_port: 8080
@@ -36,11 +37,12 @@ services:
   routes:
   - path: /api
 - name: frontend
-  git:
-    repo_clone_url: https://github.com/kathrynbuckley-spec/optisigns-onboarding.git
+  github:
+    repo: kathrynbuckley-spec/optisigns-onboarding
     branch: main
+    deploy_on_push: true
   source_dir: frontend
-  dockerfile_path: Dockerfile
+  dockerfile_path: frontend/Dockerfile
   instance_count: 1
   instance_size_slug: basic-xxs
   http_port: 8080
