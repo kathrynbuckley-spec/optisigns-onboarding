@@ -9,8 +9,7 @@ services:
       branch: main
       deploy_on_push: true
 
-    dockerfile_path: backend/Dockerfile
-    source_dir: backend
+    dockerfile_path: Dockerfile.backend
 
     instance_count: 1
     instance_size_slug: basic-xxs
@@ -47,8 +46,7 @@ services:
       branch: main
       deploy_on_push: true
 
-    dockerfile_path: frontend/Dockerfile
-    source_dir: frontend
+    dockerfile_path: Dockerfile.frontend
 
     instance_count: 1
     instance_size_slug: basic-xxs
