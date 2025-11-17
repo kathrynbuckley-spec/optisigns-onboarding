@@ -21,15 +21,15 @@ services:
       - key: PORT
         value: "8080"
       - key: JWT_SECRET
-        value: d0638e25d76e58b29c1fb63f32b49d949109916c488fb62e4b8486f8f16657047a72663a8a622d6069aa524c4847e0dd2e3567e3a8592e634db338effc979dfb
+        value: "d0638e25d76e58b29c1fb63f32b49d949109916c488fb62e4b8486f8f16657047a72663a8a622d6069aa524c4847e0dd2e3567e3a8592e634db338effc979dfb"
         type: SECRET
       - key: JWT_EXPIRES_IN
         value: 7d
       - key: MONGODB_URI
-        value: mongodb+srv://kathrynbuckley_db_user:KKwx8mSwKDXTKmSL@cluster0.f7fzwx8.mongodb.net/optisigns-onboarding?retryWrites=true&w=majority&appName=Cluster0
+        value: "mongodb+srv://kathrynbuckley_db_user:KKwx8mSwKDXTKmSL@cluster0.f7fzwx8.mongodb.net/optisigns-onboarding?retryWrites=true&w=majority&appName=Cluster0"
         type: SECRET
       - key: CORS_ORIGIN
-        value: ${frontend.PUBLIC_URL}
+        value: "${frontend.PUBLIC_URL}"
 
     health_check:
       http_path: /api/health
@@ -53,4 +53,4 @@ services:
 
     envs:
       - key: API_URL
-        value: ${backend.PUBLIC_URL}/api
+        value: "${backend.PUBLIC_URL}/api"
